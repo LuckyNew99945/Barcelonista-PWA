@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#edbb00" />
+    <link rel="apple-touch-icon" href="images/logo/logo192.png" />
+    <link
+      rel="shortcut icon"
+      href="images/logo/logo192.png"
+      type="image/x-icon"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/materialize.min.css" />
+    <style>
+      .card {
+        border-bottom: 20px solid #05264a;
+        border-top: 20px solid #c20436;
+      }
+
+      .overlay {
+        height: 100%;
+        width: 100%;
+        z-index: 999999;
+        position: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .overlay.hidden {
+        animation: fadeOut 2s;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes fadeOut {
+        100% {
+          visibility: hidden;
+          opacity: 0;
+        }
+      }
+    </style>
+    <title>Barcelonista</title>
+  </head>
+  <body>
+    <nav class="amber accent-3" role="navigation">
+      <div class="nav-wrapper container">
+        <a href="#" class="brand-logo" id="logo-container">Barcelonista</a>
+        <a href="index.html" class="sidenav-trigger" data-target="nav-mobile">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <ul class="topnav right hide-on-med-and-down"></ul>
+        <ul class="sidenav" id="nav-mobile"></ul>
+      </div>
+    </nav>
+    <div class="overlay">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div>
+          <div class="gap-patch">
+            <div class="circle"></div>
+          </div>
+          <div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" id="body-content"></div>
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large red" id="playerSave">
+        <i class="large material-icons">save</i>
+      </a>
+      <a class="btn-floating btn-large red" id="playerDelete">
+        <i class="large material-icons">delete</i>
+      </a>
+    </div>
+
+    <script src="js/materialize.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/idb.js"></script>
+    <script src="js/db.js"></script>
+    <script>
+      //Register service worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('sw.js')
+            .then(() => {
+              console.log('sw registration success');
+            })
+            .catch(function () {
+              console.log('sw registration failed');
+            });
+        });
+      } else {
+        console.log('Sw Not Supported');
+      }
+
+      window.addEventListener('load', () => {
+        const loader = document.querySelector('.overlay');
+        console.log('loader');
+        loader.className += ' hidden';
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+        let urlParams = new URLSearchParams(window.location.search);
+        let isFromSaved = urlParams.get('saved');
+        let item = getPlayersById();
+        let playerSave = document.getElementById('playerSave');
+        let playerDelete = document.getElementById('playerDelete');
+
+        playerDelete.style.display = 'none';
+
+        if (isFromSaved) {
+          playerSave.style.display = 'none';
+          playerDelete.style.display = 'block';
+          getSavedPlayersById();
+        }
+
+        playerSave.onclick = () => {
+          item
+            .then((player) => {
+              playerSaveForLater(player);
+            })
+            .then(M.toast({ html: 'Added To Saved Players!' }));
+        };
+
+        playerDelete.onclick = () => {
+          item
+            .then((player) => {
+              deletePlayer(player);
+            })
+            .then(M.toast({ html: 'Remove From Saved Players!' }));
+        };
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "barcelonista",
+  "version": "1.0.0",
+  "description": "App For Barcelona Fans",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "luckynew",
+  "license": "ISC",
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.0.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "workbox-cli": "^3.4.1",
+    "workbox-webpack-plugin": "^3.4.1"
+  }
+}
