@@ -105,7 +105,7 @@ const getSavedMatches = () => {
     match.forEach((match) => {
       matchesHTML += `
            
-        
+         
               <div class="card waves-effect ">
               <a href="./match.html?id=${match.id}&saved=true">
               <div class="card-content">
@@ -121,10 +121,11 @@ const getSavedMatches = () => {
               </a>
                 </div>
               </div>
+            
           
                 `;
     });
-    document.getElementById('body-content').innerHTML = matchesHTML;
+    document.getElementById('saved-matches').innerHTML = matchesHTML;
   });
 };
 
@@ -196,19 +197,20 @@ const getSavedPlayers = () => {
 
     player.forEach((player) => {
       playerHTML += `
-     
-  <div class="card ">
-    <a href="./player.html?id=${player.id}&saved=true">
-    <div class="card-content">
+
+  <div class="card  waves-effect">
+  <a href="./player.html?id=${player.id}&saved=true">
+  <div class="card-content ">
     <h5>Name : <strong>${player.name}</strong></h5>
     <h5>position : <strong>${player.position}</strong></h5>
+   
   </div>
-    </a>
-  </div>
+  </a>
+</div>
 
           `;
     });
-    document.getElementById('body-content').innerHTML = playerHTML;
+    document.getElementById('saved-players').innerHTML = playerHTML;
   });
 };
 
@@ -266,8 +268,12 @@ const getSavedPlayersById = () => {
 
   getByIdPlayers(idParam).then((data) => {
     let playersHTML = '';
-    let shirtNum = data.shirtNumber;
+    console.log(shirtNum);
     if (shirtNum === null) {
+      shirtNum = 'none';
+    }
+
+    if (shirtNum === undefined) {
       shirtNum = 'none';
     }
 
